@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private float Speed = 6.0f;
     private float horizontalInput;
     private float verticalInput;
-    public int lives;
+    public int lives = 3;
 
     private GameManager gameManager;
    
@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviour
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         lives = 3;
         gameManager.UpdateLivesText(lives);
-        Speed = 6.0f;
         
     }
 
@@ -78,10 +77,26 @@ public class PlayerController : MonoBehaviour
     {
         lives--;
         gameManager.UpdateLivesText(lives);
+
+        // Destroy player when out of lives
         if (lives == 0)
         {
-            //Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
+    }
+
+    public void GainLife()
+    {
+        lives++;
+
+        // Award points if life counter is max
+        if (lives > 3)
+        {
+            lives = 3;
+            gameManager.AddScore(1);
+        }
+
+        gameManager.UpdateLivesText(lives);
     }
 }

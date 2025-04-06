@@ -27,13 +27,13 @@ public class Enemy : MonoBehaviour
         if(collision.tag == "Player")
         {
             collision.GetComponent<PlayerController>().LoseLife();
-            //Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
         else if (collision.tag == "Weapon")
         {
             Destroy(collision.gameObject);
-            //Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             gameManager.AddScore(scoreValue);
             Destroy(this.gameObject);
         }

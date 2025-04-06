@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
 
     public int score;
 
+    // Pickups
+    public GameObject coinPrefab;
+    public GameObject heartPrefab;
+
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +51,9 @@ public class GameManager : MonoBehaviour
         InvokeRepeating("CreateEnemyBasic", 1, 2);
         InvokeRepeating("CreateEnemyFlow", 1.5f, 3f);
         InvokeRepeating("CreateEnemyAttack", 3f, 5f);
+
+        InvokeRepeating("CreateCoin", 5f, 5f);
+        InvokeRepeating("CreateHeart", 5f, 7f);
 
         CreateSky();
     }
@@ -72,6 +79,16 @@ public class GameManager : MonoBehaviour
     {
         // Attack enemies spawn at the right edge of the screen and move to the left
         Instantiate(enemyAttackPrefab, new Vector3(horizontalScreenLimit, Random.Range(2f, 5f), 0), Quaternion.Euler(0, 0, 90));
+    }
+
+    void CreateCoin()
+    {
+        Instantiate(coinPrefab, new Vector3(-horizontalScreenLimit, Random.Range(verticalScreenLimitUpper * 0.9f, verticalScreenLimitLower * 0.9f), 0), Quaternion.identity);
+    }
+
+    void CreateHeart()
+    {
+        Instantiate(heartPrefab, new Vector3(-horizontalScreenLimit, Random.Range(verticalScreenLimitUpper * 0.9f, verticalScreenLimitLower * 0.9f), 0), Quaternion.identity);
     }
 
     void CreateSky()

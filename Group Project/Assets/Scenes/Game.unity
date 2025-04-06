@@ -520,6 +520,8 @@ MonoBehaviour:
   livesText: {fileID: 1799761410}
   scoreText: {fileID: 1798209276}
   score: 0
+  coinPrefab: {fileID: 1875654377388236297, guid: 5285c6cbd68e0ee48b48ce06f2f1befa, type: 3}
+  heartPrefab: {fileID: 6162035476098417974, guid: 7ed689b731be2b54a861f3375f4d016d, type: 3}
 --- !u!4 &1363187462
 Transform:
   m_ObjectHideFlags: 0

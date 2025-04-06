@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lives: 0
   bulletPrefab: {fileID: 2635114563934672921, guid: 6099943607083bf4b848edf6fafa7edf, type: 3}
-  explosionPrefab: {fileID: 0}
+  explosionPrefab: {fileID: 4563444736350367091, guid: 7b755b79cd8a43448b159e4f38e61b9c, type: 3}
 --- !u!82 &154008710902589552
 AudioSource:
   m_ObjectHideFlags: 0
