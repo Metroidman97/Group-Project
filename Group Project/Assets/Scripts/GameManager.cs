@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,15 +23,26 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerPrefab;
 
+    // Game music
+    private GameObject gameMusic;
+    private GameObject loseMusic;
+
     // UI text
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI scoreText;
 
-    public int score;
+    public GameObject gameOverText;
+    public GameObject restartText;
 
+    public int score;
+    public int cloudMove;
+
+    private bool gameOver;
     // Pickups
     public GameObject coinPrefab;
     public GameObject heartPrefab;
+    public GameObject powerupPrefab;
+
 
 
     // Start is called before the first frame update
@@ -54,14 +67,27 @@ public class GameManager : MonoBehaviour
 
         InvokeRepeating("CreateCoin", 5f, 5f);
         InvokeRepeating("CreateHeart", 5f, 7f);
+        InvokeRepeating("CreatePowerup", 10f, 10f);
 
         CreateSky();
+
+        gameMusic = GameObject.Find("GameMusic");
+        loseMusic = GameObject.Find("LoseMusic");
+        loseMusic.SetActive(false);
+
+        //Cloud movement
+        cloudMove = 1;
+
+        gameOver = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (gameOver && Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     void CreateEnemyBasic()
@@ -91,6 +117,11 @@ public class GameManager : MonoBehaviour
         Instantiate(heartPrefab, new Vector3(-horizontalScreenLimit, Random.Range(verticalScreenLimitUpper * 0.9f, verticalScreenLimitLower * 0.9f), 0), Quaternion.identity);
     }
 
+    void CreatePowerup()
+    {
+        Instantiate(powerupPrefab, new Vector3(-horizontalScreenLimit, Random.Range(verticalScreenLimitUpper * 0.9f, verticalScreenLimitLower * 0.9f), 0), Quaternion.identity);
+    }
+
     void CreateSky()
     {
         for (int i = 0; i < cloudLimit; i++)
@@ -113,5 +144,15 @@ public class GameManager : MonoBehaviour
     private void UpdateScoreText()
     {
         scoreText.text = "Score: " + score;
+    }
+    public void GameOver()
+    {
+        gameOverText.SetActive(true);
+        restartText.SetActive(true);
+        gameOver = true;
+        CancelInvoke();
+        cloudMove = 0;
+        gameMusic.SetActive(false);
+        loseMusic.SetActive(true);
     }
 }

@@ -43,9 +43,14 @@ public class PickUp : MonoBehaviour
                 gameManager.AddScore(1);
                 Destroy(this.gameObject);
             }
-            else if (this.tag == "Heart") // Check if this object is a heart instead
+            else if (this.tag == "Heart") // Check if this object is a heart
             {
                 collision.GetComponent<PlayerController>().GainLife();
+                Destroy(this.gameObject);
+            }
+            else if (this.tag == "Powerup") // Check if this object is a powerup
+            {
+                collision.GetComponent<PlayerController>().ActivateShield();
                 Destroy(this.gameObject);
             }
         }
