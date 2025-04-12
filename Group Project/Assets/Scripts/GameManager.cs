@@ -22,9 +22,10 @@ public class GameManager : MonoBehaviour
     private int cloudLimit = 30;
 
     public GameObject playerPrefab;
-    public GameObject audioPlayer;
 
-    public AudioClip loseTrack;
+    // Game music
+    private GameObject gameMusic;
+    private GameObject loseMusic;
 
     // UI text
     public TextMeshProUGUI livesText;
@@ -66,8 +67,13 @@ public class GameManager : MonoBehaviour
 
         InvokeRepeating("CreateCoin", 5f, 5f);
         InvokeRepeating("CreateHeart", 5f, 7f);
+        InvokeRepeating("CreatePowerup", 10f, 10f);
 
         CreateSky();
+
+        gameMusic = GameObject.Find("GameMusic");
+        loseMusic = GameObject.Find("LoseMusic");
+        loseMusic.SetActive(false);
 
         //Cloud movement
         cloudMove = 1;
@@ -111,6 +117,11 @@ public class GameManager : MonoBehaviour
         Instantiate(heartPrefab, new Vector3(-horizontalScreenLimit, Random.Range(verticalScreenLimitUpper * 0.9f, verticalScreenLimitLower * 0.9f), 0), Quaternion.identity);
     }
 
+    void CreatePowerup()
+    {
+        Instantiate(powerupPrefab, new Vector3(-horizontalScreenLimit, Random.Range(verticalScreenLimitUpper * 0.9f, verticalScreenLimitLower * 0.9f), 0), Quaternion.identity);
+    }
+
     void CreateSky()
     {
         for (int i = 0; i < cloudLimit; i++)
@@ -122,25 +133,6 @@ public class GameManager : MonoBehaviour
     public void UpdateLivesText(int currentLives)
     {
         livesText.text = "Lives: " + currentLives;
-    }
-
-    public void PlaySound(int whichSound)
-    {
-        switch (whichSound)
-        {
-            case 1:
-                
-                break;
-
-            case 2:
-
-                break;
-
-            case 3:
-                audioPlayer.GetComponent<AudioSource>().PlayOneShot(loseTrack);
-
-                break;
-        }
     }
 
     public void AddScore(int earnedScore)
@@ -160,6 +152,7 @@ public class GameManager : MonoBehaviour
         gameOver = true;
         CancelInvoke();
         cloudMove = 0;
-        PlaySound(3);
+        gameMusic.SetActive(false);
+        loseMusic.SetActive(true);
     }
 }

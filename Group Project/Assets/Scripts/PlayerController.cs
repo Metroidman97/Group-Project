@@ -16,13 +16,20 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     public GameObject explosionPrefab;
 
+    private GameObject shield;
+    private bool shieldState = false;
+
+    public AudioClip powerUp;
+    public AudioClip powerDown;
+
     // Start is called before the first frame update
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         lives = 3;
         gameManager.UpdateLivesText(lives);
-        
+        shield = GameObject.Find("Player Shield");
+        shield.SetActive(false);
     }
 
     // Update is called once per frame
@@ -75,16 +82,25 @@ public class PlayerController : MonoBehaviour
     // Manage lives
     public void LoseLife()
     {
-        lives--;
-        gameManager.UpdateLivesText(lives);
-
-        // Destroy player when out of lives
-        if (lives == 0)
+        // Check if the player is shielded before removing a life
+        if (shieldState)
         {
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            gameManager.GameOver();
-            Destroy(this.gameObject);
+            DeactivateShield();
         }
+        else if (!shieldState)
+        {
+            lives--;
+            gameManager.UpdateLivesText(lives);
+
+            // Destroy player when out of lives
+            if (lives == 0)
+            {
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+                gameManager.GameOver();
+                Destroy(this.gameObject);
+            }
+        }
+        
     }
 
     public void GainLife()
@@ -99,5 +115,19 @@ public class PlayerController : MonoBehaviour
         }
 
         gameManager.UpdateLivesText(lives);
+    }
+
+    public void ActivateShield()
+    {
+        shieldState = true;
+        shield.SetActive(true);
+        AudioSource.PlayClipAtPoint(powerUp, transform.position);
+    }
+
+    private void DeactivateShield()
+    {
+        shieldState = false;
+        shield.SetActive(false);
+        AudioSource.PlayClipAtPoint(powerDown, transform.position);
     }
 }
