@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,16 +22,26 @@ public class GameManager : MonoBehaviour
     private int cloudLimit = 30;
 
     public GameObject playerPrefab;
+    public GameObject audioPlayer;
+
+    public AudioClip loseTrack;
 
     // UI text
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI scoreText;
 
-    public int score;
+    public GameObject gameOverText;
+    public GameObject restartText;
 
+    public int score;
+    public int cloudMove;
+
+    private bool gameOver;
     // Pickups
     public GameObject coinPrefab;
     public GameObject heartPrefab;
+    public GameObject powerupPrefab;
+
 
 
     // Start is called before the first frame update
@@ -56,12 +68,20 @@ public class GameManager : MonoBehaviour
         InvokeRepeating("CreateHeart", 5f, 7f);
 
         CreateSky();
+
+        //Cloud movement
+        cloudMove = 1;
+
+        gameOver = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (gameOver && Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     void CreateEnemyBasic()
@@ -104,6 +124,25 @@ public class GameManager : MonoBehaviour
         livesText.text = "Lives: " + currentLives;
     }
 
+    public void PlaySound(int whichSound)
+    {
+        switch (whichSound)
+        {
+            case 1:
+                
+                break;
+
+            case 2:
+
+                break;
+
+            case 3:
+                audioPlayer.GetComponent<AudioSource>().PlayOneShot(loseTrack);
+
+                break;
+        }
+    }
+
     public void AddScore(int earnedScore)
     {
         score += earnedScore;
@@ -113,5 +152,14 @@ public class GameManager : MonoBehaviour
     private void UpdateScoreText()
     {
         scoreText.text = "Score: " + score;
+    }
+    public void GameOver()
+    {
+        gameOverText.SetActive(true);
+        restartText.SetActive(true);
+        gameOver = true;
+        CancelInvoke();
+        cloudMove = 0;
+        PlaySound(3);
     }
 }

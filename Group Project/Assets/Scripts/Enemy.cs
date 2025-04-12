@@ -22,17 +22,17 @@ public class Enemy : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D whatDidIHit)
     {
-        if(collision.tag == "Player")
+        if(whatDidIHit.tag == "Player")
         {
-            collision.GetComponent<PlayerController>().LoseLife();
+            whatDidIHit.GetComponent<PlayerController>().LoseLife();
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
-        else if (collision.tag == "Weapon")
+        else if (whatDidIHit.tag == "Weapon")
         {
-            Destroy(collision.gameObject);
+            Destroy(whatDidIHit.gameObject);
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             gameManager.AddScore(scoreValue);
             Destroy(this.gameObject);
